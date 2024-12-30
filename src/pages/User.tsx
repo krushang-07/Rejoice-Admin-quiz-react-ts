@@ -14,18 +14,18 @@ type Quiz = {
 };
 
 const User: React.FC = () => {
-  const [quiz, setQuiz] = useState<Quiz | null>(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [answers, setAnswers] = useState<(string | null)[]>([]);
-  const [timer, setTimer] = useState<number>(0);
-  const [isTimeUp, setIsTimeUp] = useState<boolean>(false);
-  const [quizStarted, setQuizStarted] = useState<boolean>(false);
+  const [quiz, setQuiz] = useState<Quiz | null>(null);  //if any question are not than quiz are null otherwise quiz have a questions
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0); //that show the current question index for the direction
+  const [answers, setAnswers] = useState<(string | null)[]>([]); //set answer
+  const [timer, setTimer] = useState<number>(0);   //set timer value in state
+  const [isTimeUp, setIsTimeUp] = useState<boolean>(false);  //set end time state
+  const [quizStarted, setQuizStarted] = useState<boolean>(false);  //set quiz started or not state
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null); // Track selected answer
-  const [quizCompleted, setQuizCompleted] = useState<Boolean>(false);
+  const [quizCompleted, setQuizCompleted] = useState<Boolean>(false);  //set quiz completed or not state
   const [score, setScore] = useState<number>(0); // State to store score
 
   useEffect(() => {
-    const savedQuiz = localStorage.getItem("quiz");
+    const savedQuiz = localStorage.getItem("quiz");  //get stored quiz data from local storage
     if (savedQuiz) {
       const parsedQuiz: Quiz = JSON.parse(savedQuiz);
       setQuiz(parsedQuiz);
@@ -37,16 +37,16 @@ const User: React.FC = () => {
 
   useEffect(() => {
     if (timer > 0) {
-      const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
+      const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);  //every 1 second the timer value are decrement
       return () => clearInterval(interval);
     } else {
-      setIsTimeUp(true);
+      setIsTimeUp(true);  //when the timer value are 0 then times up are true 
     }
   }, [timer]);
 
   const handleAnswer = (answer: string) => {
     if (!isTimeUp && !selectedAnswer) { // Ensure you can only select one answer
-      setSelectedAnswer(answer); // Set selected answer
+      setSelectedAnswer(answer); // Set selected answer store
       setAnswers((prev) => [...prev, answer]);
     }
   };
@@ -66,23 +66,22 @@ const User: React.FC = () => {
       setIsTimeUp(false);
       setSelectedAnswer(null);  // Reset selected answer for the next question
     } else {
-      calculateResult();
-    }
+      calculateResult(); ///when quiz are in last question than the calculate the result and function call
+    } 
   };
   
 
   const calculateResult = () => {
     if (quiz) {
       const score = quiz.questions.reduce((acc, question, index) => {
-        return acc + (question.correctAnswer === answers[index] ? 1 : 0);
+        return acc + (question.correctAnswer === answers[index] ? 1 : 0);  //if correctanswer are matched to the answer index than add 1 otherwise set zero
       }, 0);
       setScore(score);
-      //alert(`Your Score: ${score} / ${quiz.questions.length}`);
       setQuizCompleted(true);
     }
   };
 
-  if (!quiz) {
+  if (!quiz) {  //when quiz are not render or not found than set loading
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="flex flex-col items-center">
@@ -95,7 +94,7 @@ const User: React.FC = () => {
     );
   }
 
-  const currentQuestion = quiz.questions[currentQuestionIndex];
+  const currentQuestion = quiz.questions[currentQuestionIndex]; //assign current question value
 
   return (
     <>
