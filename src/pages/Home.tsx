@@ -23,7 +23,7 @@ const HomePage: React.FC = () => {
             <Link to="/user">User Quiz</Link>
           </li>
         </ul>
-         <div className="mt-auto text-center p-4">
+        <div className="mt-auto text-center p-4">
           <p className="text-xs">&copy; 2024 Quiz App. All Rights Reserved.</p>
         </div>
       </div>
@@ -53,7 +53,7 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
-     </div>
+    </div>
   );
 };
 
