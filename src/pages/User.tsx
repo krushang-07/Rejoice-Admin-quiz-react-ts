@@ -111,14 +111,14 @@ const User: React.FC = () => {
       {!quizStarted ? (
         <div
           className={`flex flex-col items-center justify-center min-h-screen ${
-            theme === 'light' ? 'bg-blue-100' : 'bg-black-900'
+            theme === 'light' ? 'bg-white' : 'bg-black-900'
           }`}
         >
           <h1 className="text-4xl font-bold text-white-800 mb-6">Welcome to QuizHub</h1>
           <p className="text-lg text-gray-600 mb-10">Get ready to test your knowledge!</p>
           <button
             onClick={() => setQuizStarted(true)}
-            className="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-200"
+            className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-500"
           >
             Start Quiz
           </button>
@@ -126,10 +126,12 @@ const User: React.FC = () => {
       ) : (
         <div
           className={`flex flex-col items-center justify-center min-h-screen ${
-            theme === 'light' ? 'bg-gray-100' : 'bg-gray-900'
+            theme === 'light' ? 'bg-gray-100' : 'bg-black'
           }`}
         >
-          <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md">
+            <div className={`w-full max-w-2xl p-8 rounded-lg shadow-md ${
+            theme === 'light' ? 'bg-gray-100' : 'bg-black'
+          }`}>
             <h1
               className={`text-2xl font-bold text-gray-800 mb-4 ${
                 theme === 'light' ? 'text-black' : 'text-white'
@@ -138,14 +140,14 @@ const User: React.FC = () => {
               {quiz.title}
             </h1>
             <div className="mb-4">
-              <p className="text-sm text-gray-800">
+              <p className="text-sm text-gray-500">
                 Question {currentQuestionIndex + 1} / {quiz.questions.length}
               </p>
-              <p className="text-sm text-gray-600">Time Remaining: {timer} seconds</p>
+              <p className="text-sm text-gray-500">Time Remaining: {timer} seconds</p>
             </div>
             <p
               className={`text-lg font-medium mb-6 ${
-                theme === 'light' ? 'text-black' : 'text-gray-800'
+                theme === 'light' ? 'text-black' : 'text-white'
               }`}
             >
               {currentQuestion.question}

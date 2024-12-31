@@ -4,13 +4,13 @@ import Admin from "./pages/Admin.tsx";
 import User from "./pages/User.tsx";
 import Home from "./pages/Home.tsx";
 import { ThemeProvider }  from "./utils/ThemeProvider.tsx";
-//import Header from "./components/Header.tsx";
+import Header from "./components/Header.tsx";
 
 const App: React.FC = () => {
   return (
     <ThemeProvider>
       <Router>
-        {/* <Header /> */}
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
