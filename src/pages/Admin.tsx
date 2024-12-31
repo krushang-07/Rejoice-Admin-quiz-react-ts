@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Header from "../components/Header.tsx";
+import { useTheme } from "../utils/ThemeProvider.tsx";
 
 // Types for Quiz, Question, and Options
 type Question = {
@@ -19,11 +21,14 @@ const Admin: React.FC = () => {
     questions: [],
   });
 
+   const { theme} = useTheme();
+
   const [question, setQuestion] = useState<string>('');
   const [options, setOptions] = useState<string[]>(['', '', '', '']);
   const [correctAnswer, setCorrectAnswer] = useState<string>('');
   const [timer, setTimer] = useState<number>(10); // Default timer in seconds
-
+  
+ 
   const addQuestion = () => {
     const newQuestion: Question = { question, options, correctAnswer, timer };
     // console.log(newQuestion)
@@ -43,8 +48,18 @@ const Admin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r bg-gray-400 p-6 text-white">
-      <div className="max-w-3xl mx-auto bg-white text-black rounded-lg shadow-lg p-8">
+    <div
+    className={`min-h-screen p-6 ${
+      theme === 'light' ? 'bg-gradient-to-r from-gray-200 to-gray-400' : 'bg-gradient-to-r from-gray-800 to-gray-900'
+    } text-white`}
+  >
+    <Header /> {/* Include Header here */}
+
+    <div
+      className={`max-w-3xl mx-auto p-8 rounded-lg shadow-lg ${
+        theme === 'light' ? 'bg-white text-black' : 'bg-gray-800 text-white'
+      }`}
+    >
         <h1 className="text-3xl font-bold text-center mb-6">
           Admin Dashboard
         </h1>

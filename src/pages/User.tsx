@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Confetti from "react-confetti";
+import { useTheme } from "../utils/ThemeProvider.tsx";
 
 type Question = {
   question: string;
@@ -23,11 +24,12 @@ const User: React.FC = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null); // Track selected answer
   const [quizCompleted, setQuizCompleted] = useState<Boolean>(false);  //set quiz completed or not state
   const [score, setScore] = useState<number>(0); // State to store score
+  const { theme } = useTheme();
 
   useEffect(() => {
     const savedQuiz = localStorage.getItem("quiz");  //get stored quiz data from local storage
     if (savedQuiz) {
-      const parsedQuiz: Quiz = JSON.parse(savedQuiz);
+      const parsedQuiz: Quiz = JSON.parse(savedQuiz);  //convert back to string to object 
       setQuiz(parsedQuiz);
       if (parsedQuiz.questions.length > 0) {
         setTimer(parsedQuiz.questions[0].timer); // Set timer for the first question
@@ -74,7 +76,7 @@ const User: React.FC = () => {
   const calculateResult = () => {
     if (quiz) {
       const score = quiz.questions.reduce((acc, question, index) => {
-        return acc + (question.correctAnswer === answers[index] ? 1 : 0);  //if correctanswer are matched to the answer index than add 1 otherwise set zero
+        return acc + (question.correctAnswer === answers[index] ? 1 : 0);  //if correct answer are matched to the answer index than add 1 otherwise set zero
       }, 0);
       setScore(score);
       setQuizCompleted(true);
@@ -107,59 +109,76 @@ const User: React.FC = () => {
         />
       )}
       {!quizStarted ? (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-blue-100">
-          <h1 className="text-4xl font-bold text-gray-800 mb-6">Welcome to QuizHub</h1>
+        <div
+          className={`flex flex-col items-center justify-center min-h-screen ${
+            theme === 'light' ? 'bg-blue-100' : 'bg-black-900'
+          }`}
+        >
+          <h1 className="text-4xl font-bold text-white-800 mb-6">Welcome to QuizHub</h1>
           <p className="text-lg text-gray-600 mb-10">Get ready to test your knowledge!</p>
           <button
             onClick={() => setQuizStarted(true)}
-            className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600">
+            className="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-200"
+          >
             Start Quiz
           </button>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <div
+          className={`flex flex-col items-center justify-center min-h-screen ${
+            theme === 'light' ? 'bg-gray-100' : 'bg-gray-900'
+          }`}
+        >
           <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md">
-            <h1 className="text-2xl font-bold text-gray-800 mb-4">{quiz.title}</h1>
+            <h1
+              className={`text-2xl font-bold text-gray-800 mb-4 ${
+                theme === 'light' ? 'text-black' : 'text-white'
+              }`}
+            >
+              {quiz.title}
+            </h1>
             <div className="mb-4">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-800">
                 Question {currentQuestionIndex + 1} / {quiz.questions.length}
               </p>
               <p className="text-sm text-gray-600">Time Remaining: {timer} seconds</p>
             </div>
-            <p className="text-lg font-medium text-gray-800 mb-6">
+            <p
+              className={`text-lg font-medium mb-6 ${
+                theme === 'light' ? 'text-black' : 'text-gray-800'
+              }`}
+            >
               {currentQuestion.question}
             </p>
             {currentQuestion.options.map((option, index) => (
               <button
                 key={index}
                 onClick={() => handleAnswer(option)}
-                disabled={isTimeUp || (selectedAnswer !== null && option !== selectedAnswer)}  // Disabled when timer is up or answer is selected
-                className={`block w-full py-3 px-4 mb-4 rounded-lg text-left border
-                   ${
-                    option === selectedAnswer
-                      ? "bg-blue-500 text-blue-700"  // Highlight selected answer
-                      : "bg-gray-100 border-gray-300 hover:bg-gray-200"
-                  }
-                  ${
-                    isTimeUp
-                      ? "bg-gray-300 border-gray-300 cursor-not-allowed"
-                      : "bg-gray-100 border-gray-300 hover:bg-gray-200"
-                  } 
-               `}>
+                disabled={isTimeUp || (selectedAnswer !== null && option !== selectedAnswer)}
+                className={`block w-full py-3 px-4 mb-4 rounded-lg text-left border ${
+                  option === selectedAnswer
+                    ? 'bg-gray-300 text-white-700'
+                    : theme === 'light'
+                    ? 'bg-gray-100 border-gray-300 hover:bg-gray-200'
+                    : 'bg-gray-700 border-gray-600 hover:bg-gray-600'
+                } ${isTimeUp ? 'bg-gray-300 border-gray-300 cursor-not-allowed' : ''}`}
+              >
                 {option}
               </button>
             ))}
             <div className="flex justify-between mt-4">
               <button
                 onClick={skipQuestion}
-                className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">
+                className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900"
+              >
                 Skip Question
               </button>
               {selectedAnswer && (
                 <button
                   onClick={goToNextQuestion}
-                  disabled={!selectedAnswer}  // Disable until an answer is selected
-                  className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                  disabled={!selectedAnswer}
+                  className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-900"
+                >
                   Next Question
                 </button>
               )}
@@ -167,15 +186,17 @@ const User: React.FC = () => {
             <div className="flex justify-between mt-4">
               <button
                 onClick={() => window.location.reload()}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                className="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-900"
+              >
                 Reset Quiz
               </button>
-              </div>
-              {/* Display score when quiz is completed */}
+            </div>
             {quizCompleted && (
-                <div className="mt-6">
-                  <h3 className="text-m text-green-600">Quiz Completed🎉</h3>
-                <h2 className="text-2xl font-bold text-gray-800">Your Score: {score} / {quiz.questions.length}</h2>
+              <div className="mt-6">
+                <h3 className="text-m text-green-600">Quiz Completed🎉</h3>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Your Score: {score} / {quiz.questions.length}
+                </h2>
               </div>
             )}
           </div>

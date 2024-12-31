@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+/* index.css or App.css */
+:root {
+  --bg-color: white;
+  --text-color: black;
+}
+
+.dark {
+  --bg-color: black;
+  --text-color: white;
+}
+
+html {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.app {
+  min-height: 100vh;
+}
